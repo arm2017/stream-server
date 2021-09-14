@@ -72,7 +72,10 @@ func Run() {
 			B: 244,
 			A: 1,
 		}, 2)
-		jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img)
+
+		img2 := gocv.NewMat()
+		img.CopyTo(&img2)
+		jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img2)
 
 		if jpgerr != nil {
 			fmt.Println("jpg encode error")
