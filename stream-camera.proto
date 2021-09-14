@@ -1,0 +1,27 @@
+syntax = "proto3";
+option go_package = "stream-camera/api";
+
+message CameReq {
+  string cameId = 1;
+  bytes img = 2;
+  int64 timeFrame = 3;
+}
+
+message CameRsp {
+  string cameId = 1;
+}
+
+message VeiwReq{
+  string cameId = 1;
+}
+
+message VeiwRsp{
+  string cameId = 1;
+  bytes img = 2;
+  int64 timeFrame = 3;
+}
+
+service StreamCameService {
+  rpc streaming (stream CameReq) returns (CameRsp) {}
+  rpc view (VeiwReq) returns (stream VeiwRsp) {}
+}
