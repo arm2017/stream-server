@@ -17,8 +17,8 @@ import (
 
 const (
 	// address  = "localhost:50051"
-	address  = "0.tcp.ap.ngrok.io:17097"
-	deviceID = 1
+	address  = "0.tcp.ap.ngrok.io:17368"
+	deviceID = 0
 )
 
 func Run() {
