@@ -66,9 +66,9 @@ func Run() {
 			X: 10,
 			Y: 50,
 		}, gocv.FontHersheyComplex, 0.7, color.RGBA{
-			R: 255,
-			G: 0,
-			B: 0,
+			R: 59,
+			G: 57,
+			B: 244,
 			A: 1,
 		}, 2)
 		jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img)
