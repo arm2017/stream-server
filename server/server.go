@@ -43,8 +43,8 @@ func (svr *server) Streaming(stream api.StreamCameService_StreamingServer) error
 		}
 		mainErr := stream.Context().Err()
 		if mainErr != nil {
-			fmt.Println(err)
-			return err
+			fmt.Println(mainErr)
+			return mainErr
 		}
 
 		// _, ok := svr.cams[req.CameId]

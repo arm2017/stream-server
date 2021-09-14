@@ -55,12 +55,15 @@ func Run() {
 		}
 
 		fmt.Printf("Recive %v , Time : %v \n", req.CameId, req.TimeFrame)
-		jpg, jpgErr := gocv.IMDecode(req.Img, gocv.IMReadAnyColor)
-		defer jpg.Close()
+		// jpg, jpgErr := gocv.IMDecode(req.Img, gocv.IMReadAnyColor)
+		// defer jpg.Close()
 
+		jpg, jpgErr := gocv.NewMatFromBytes(480, 640, gocv.MatTypeCV8UC3, req.Img)
 		if jpgErr != nil {
 			fmt.Println("Oopsie daisy. I made a boo boo!", err)
+			continue
 		}
+		defer jpg.Close()
 		window.IMShow(jpg)
 		window.WaitKey(1)
 	}

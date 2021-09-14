@@ -27,6 +27,7 @@ func Run() {
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
+	log.Printf("connect: %v\n", address)
 	defer conn.Close()
 	c := api.NewStreamCameServiceClient(conn)
 
@@ -71,14 +72,16 @@ func Run() {
 			B: 244,
 			A: 1,
 		}, 2)
-		jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img)
-		defer jpg.Close()
+		// jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img)
+		// defer jpg.Close()
 
-		if jpgerr != nil {
-			fmt.Println("jpg encode error")
-			continue
-		}
-		jpbbyte := jpg.GetBytes()
+		// fmt.Println(img.Rows())
+
+		// if jpgerr != nil {
+		// 	fmt.Println("jpg encode error")
+		// 	continue
+		// }
+		jpbbyte := img.ToBytes()
 		sendErr := stream.Send(&api.CameReq{
 			CameId:    "1234",
 			TimeFrame: timef,
