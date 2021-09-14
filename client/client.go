@@ -87,7 +87,7 @@ func Run() {
 		if sendErr != nil {
 			log.Fatalln(sendErr)
 		}
-		fmt.Printf("Send... : %v , Size : %v\n", timef, len(jpbbyte))
+		// fmt.Printf("Send... : %v , Size : %v\n", timef, len(jpbbyte))
 		time.Sleep(100 * time.Microsecond)
 	}
 }
