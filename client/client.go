@@ -49,6 +49,8 @@ func Run() {
 		log.Fatalf("could not greet: %v", err)
 	}
 
+	loop := 0
+
 	for {
 
 		if ok := webcam.Read(&img); !ok {
@@ -89,7 +91,8 @@ func Run() {
 		if sendErr != nil {
 			log.Fatalln(sendErr)
 		}
-		// fmt.Printf("Send... : %v , Size : %v\n", timef, len(jpbbyte))
+		loop = loop + 1
+		fmt.Printf("Send... : %v , Loop : %v\n", timef, (loop))
 		time.Sleep(100 * time.Microsecond)
 	}
 }
