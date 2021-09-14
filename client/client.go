@@ -72,20 +72,16 @@ func Run() {
 			B: 244,
 			A: 1,
 		}, 2)
-		// jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img)
-		// defer jpg.Close()
+		jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img)
 
-		// fmt.Println(img.Rows())
-
-		// if jpgerr != nil {
-		// 	fmt.Println("jpg encode error")
-		// 	continue
-		// }
-		jpbbyte := img.ToBytes()
+		if jpgerr != nil {
+			fmt.Println("jpg encode error")
+			continue
+		}
 		sendErr := stream.Send(&api.CameReq{
 			CameId:    "1234",
 			TimeFrame: timef,
-			Img:       jpbbyte,
+			Img:       jpg.GetBytes(),
 		})
 		if sendErr != nil {
 			log.Fatalln(sendErr)
