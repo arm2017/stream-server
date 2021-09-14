@@ -15,12 +15,12 @@ import (
 
 const (
 	port      = "localhost:50051"
-	bufferImg = 15
+	bufferImg = 30
 )
 
 type server struct {
 	api.UnimplementedStreamCameServiceServer
-	cams map[string]api.CameReq
+	cams *api.CameReq
 }
 
 func (svr *server) Streaming(stream api.StreamCameService_StreamingServer) error {
@@ -47,19 +47,9 @@ func (svr *server) Streaming(stream api.StreamCameService_StreamingServer) error
 			return mainErr
 		}
 
-		// _, ok := svr.cams[req.CameId]
-		// if !ok {
-		// 	fmt.Println("client stream id : " + req.CameId)
-		// }
-
 		if req.TimeFrame >= lastTimeFrame {
 			lastTimeFrame = req.TimeFrame
-			svr.cams[req.CameId] = api.CameReq{
-				CameId:    req.CameId,
-				Img:       req.Img,
-				TimeFrame: req.TimeFrame,
-			}
-
+			svr.cams = req
 		}
 
 	}
@@ -72,10 +62,11 @@ func (svr *server) View(in *api.VeiwReq, stream api.StreamCameService_ViewServer
 	log.Printf("Client connect view id : %v", in.CameId)
 	var lastTimeFrame int64 = 0
 	for {
-		item, ok := svr.cams[in.CameId]
-		if !ok {
+		item := svr.cams
+		if item == nil {
 			return errors.New("fail cam id not found")
 		}
+
 		if item.TimeFrame > lastTimeFrame {
 
 			sendErr := stream.Send(&api.VeiwRsp{
@@ -89,8 +80,8 @@ func (svr *server) View(in *api.VeiwReq, stream api.StreamCameService_ViewServer
 				return sendErr
 			}
 			lastTimeFrame = item.TimeFrame
-			time.Sleep(50 * time.Millisecond)
 		}
+
 		time.Sleep(10 * time.Millisecond)
 	}
 
@@ -102,9 +93,7 @@ func Run() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	api.RegisterStreamCameServiceServer(s, &server{
-		cams: make(map[string]api.CameReq),
-	})
+	api.RegisterStreamCameServiceServer(s, &server{})
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
