@@ -55,7 +55,7 @@ func Run() {
 		}
 
 		fmt.Printf("Recive %v , Time : %v \n", req.CameId, req.TimeFrame)
-		jpg, jpgErr := gocv.IMDecode(req.Img, gocv.IMReadAnyColor)
+		jpg, jpgErr := gocv.IMDecode(req.Img, gocv.IMReadColor)
 		defer jpg.Close()
 
 		if jpgErr != nil {
