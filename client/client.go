@@ -17,20 +17,12 @@ import (
 
 const (
 	// address = "172.20.10.4:50051"
-	address  = "0.tcp.ap.ngrok.io:17368"
-	deviceID = 0
+	address    = "0.tcp.ap.ngrok.io:17368"
+	deviceID   = 0
+	jpgQuality = 50
 )
 
-func Run() {
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	log.Printf("connect: %v\n", address)
-	defer conn.Close()
-	c := api.NewStreamCameServiceClient(conn)
-
+func streamCameToServer(streamClient *api.StreamCameServiceClient) {
 	//webcame
 	webcam, err := gocv.OpenVideoCapture(deviceID)
 	if err != nil {
@@ -42,7 +34,7 @@ func Run() {
 	defer webcam.Close()
 	// prepare image matrix
 
-	stream, err := c.Streaming(context.Background(), grpc.UseCompressor(gzip.Name))
+	stream, err := (*streamClient).Streaming(context.Background(), grpc.UseCompressor(gzip.Name))
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
@@ -75,7 +67,7 @@ func Run() {
 			A: 1,
 		}, 2)
 
-		jpg, jpgerr := gocv.IMEncodeWithParams(gocv.JPEGFileExt, img, []int{gocv.IMWriteJpegQuality, 50})
+		jpg, jpgerr := gocv.IMEncodeWithParams(gocv.JPEGFileExt, img, []int{gocv.IMWriteJpegQuality, jpgQuality})
 		if jpgerr != nil {
 			fmt.Println("jpg encode error")
 			continue
@@ -92,4 +84,18 @@ func Run() {
 		fmt.Printf("Send... : %v , Loop : %v\n", timef, (loop))
 		time.Sleep(100 * time.Microsecond)
 	}
+}
+
+func Run() {
+	// Set up a connection to the server.
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	log.Printf("connect: %v\n", address)
+	defer conn.Close()
+	c := api.NewStreamCameServiceClient(conn)
+	//stream to server
+	streamCameToServer(&c)
+	fmt.Println("end")
 }
