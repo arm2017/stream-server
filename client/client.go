@@ -3,8 +3,6 @@ package client
 import (
 	"context"
 	"fmt"
-	"image"
-	"image/color"
 	"log"
 	api "stream-cam-api/stream-camera/api"
 	"time"
@@ -64,16 +62,16 @@ func Run() {
 
 		timenow := time.Now()
 		timef := timenow.UnixMilli()
-		timetxt := timenow.Format(time.RFC3339Nano)
-		gocv.PutText(&img, timetxt, image.Point{
-			X: 10,
-			Y: 50,
-		}, gocv.FontHersheyComplex, 0.7, color.RGBA{
-			R: 59,
-			G: 57,
-			B: 244,
-			A: 1,
-		}, 2)
+		// timetxt := timenow.Format(time.RFC3339Nano)
+		// gocv.PutText(&img, timetxt, image.Point{
+		// 	X: 10,
+		// 	Y: 50,
+		// }, gocv.FontHersheyComplex, 0.7, color.RGBA{
+		// 	R: 59,
+		// 	G: 57,
+		// 	B: 244,
+		// 	A: 1,
+		// }, 2)
 
 		jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img)
 		if jpgerr != nil {
