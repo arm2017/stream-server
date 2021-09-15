@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	client.Run()
+	client.Run2()
 	fmt.Print("OK.")
 }

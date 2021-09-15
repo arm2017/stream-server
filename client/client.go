@@ -48,9 +48,10 @@ func Run() {
 	}
 
 	loop := 0
+	img := gocv.NewMat()
+	defer img.Close()
 
 	for {
-		img := gocv.NewMat()
 
 		if ok := webcam.Read(&img); !ok {
 			fmt.Printf("cannot read device %v\n", deviceID)
@@ -90,6 +91,5 @@ func Run() {
 		loop = loop + 1
 		fmt.Printf("Send... : %v , Loop : %v\n", timef, (loop))
 		time.Sleep(100 * time.Microsecond)
-		img.Close()
 	}
 }
