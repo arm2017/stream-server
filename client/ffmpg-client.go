@@ -15,7 +15,7 @@ import (
 func captureImg() {
 	// ffmpeg -f v4l2 -i /dev/video0 -vframes 1 test.jpeg
 	cmd := exec.Command("ffmpeg", "-f", "v4l2", "-i", "/dev/video0", "-vframes", "1", "test.jpeg", "-y")
-	err := cmd.Wait()
+	err := cmd.Run()
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -48,8 +48,8 @@ func Run2() {
 	defer img.Close()
 
 	captureImg()
-
-	stream.CloseSend()
+	_ = stream
+	// stream.CloseSend()
 
 	// for {
 
