@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -20,7 +21,15 @@ const (
 
 type server struct {
 	api.UnimplementedStreamCameServiceServer
-	cams *api.CameReq
+	cams   *api.CameReq
+	movehw MoveHW
+}
+
+type MoveHW struct {
+	hwId        string
+	online      bool
+	lastConnect int64
+	cmd         api.MoveRsp
 }
 
 func (svr *server) Streaming(stream api.StreamCameService_StreamingServer) error {
@@ -85,6 +94,73 @@ func (svr *server) View(in *api.VeiwReq, stream api.StreamCameService_ViewServer
 		time.Sleep(10 * time.Millisecond)
 	}
 
+}
+
+func (svr *server) MoveRegister(in *api.MoveRegisterReq, stream api.StreamCameService_MoveRegisterServer) error {
+
+	if svr.movehw.online {
+		return errors.New("hw is online")
+	}
+
+	svr.movehw.hwId = in.HwId
+	svr.movehw.lastConnect = in.RegisTime
+	svr.movehw.online = true
+	svr.movehw.cmd = api.MoveRsp{
+		Direction: "",
+		TimeMove:  0,
+	}
+	lasttime := int64(0)
+	fmt.Printf("MoveRegister : %v\n", in.HwId)
+
+	for {
+		if svr.movehw.cmd.TimeMove > lasttime {
+			lasttime = svr.movehw.cmd.TimeMove
+
+			err := stream.Send(&api.MoveRsp{
+				Direction: svr.movehw.cmd.Direction,
+				TimeMove:  svr.movehw.cmd.TimeMove,
+			})
+
+			if err != nil {
+				fmt.Println(err)
+				svr.movehw.online = false
+				return err
+			}
+
+		}
+
+		time.Sleep(10 * time.Millisecond)
+
+		cterr := stream.Context().Err()
+		if cterr != nil {
+			fmt.Println(cterr)
+			svr.movehw.online = false
+			break
+		}
+
+	}
+
+	return nil
+
+}
+
+func (svr *server) Move(ct context.Context, in *api.MoveReq) (*api.MoveRsp, error) {
+
+	if svr.movehw.hwId != in.HwId {
+		return nil, errors.New("id not match")
+	}
+
+	if !svr.movehw.online {
+		return nil, errors.New("move hw is offline")
+	}
+
+	svr.movehw.cmd.Direction = in.Direction
+	svr.movehw.cmd.TimeMove = in.TimeMove
+
+	return &api.MoveRsp{
+		Direction: in.Direction,
+		TimeMove:  in.TimeMove,
+	}, nil
 }
 
 func Run() {

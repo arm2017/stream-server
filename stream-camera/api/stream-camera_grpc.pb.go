@@ -20,6 +20,8 @@ const _ = grpc.SupportPackageIsVersion7
 type StreamCameServiceClient interface {
 	Streaming(ctx context.Context, opts ...grpc.CallOption) (StreamCameService_StreamingClient, error)
 	View(ctx context.Context, in *VeiwReq, opts ...grpc.CallOption) (StreamCameService_ViewClient, error)
+	Move(ctx context.Context, in *MoveReq, opts ...grpc.CallOption) (*MoveRsp, error)
+	MoveRegister(ctx context.Context, in *MoveRegisterReq, opts ...grpc.CallOption) (StreamCameService_MoveRegisterClient, error)
 }
 
 type streamCameServiceClient struct {
@@ -96,12 +98,55 @@ func (x *streamCameServiceViewClient) Recv() (*VeiwRsp, error) {
 	return m, nil
 }
 
+func (c *streamCameServiceClient) Move(ctx context.Context, in *MoveReq, opts ...grpc.CallOption) (*MoveRsp, error) {
+	out := new(MoveRsp)
+	err := c.cc.Invoke(ctx, "/StreamCameService/move", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *streamCameServiceClient) MoveRegister(ctx context.Context, in *MoveRegisterReq, opts ...grpc.CallOption) (StreamCameService_MoveRegisterClient, error) {
+	stream, err := c.cc.NewStream(ctx, &StreamCameService_ServiceDesc.Streams[2], "/StreamCameService/moveRegister", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &streamCameServiceMoveRegisterClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type StreamCameService_MoveRegisterClient interface {
+	Recv() (*MoveRsp, error)
+	grpc.ClientStream
+}
+
+type streamCameServiceMoveRegisterClient struct {
+	grpc.ClientStream
+}
+
+func (x *streamCameServiceMoveRegisterClient) Recv() (*MoveRsp, error) {
+	m := new(MoveRsp)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // StreamCameServiceServer is the server API for StreamCameService service.
 // All implementations must embed UnimplementedStreamCameServiceServer
 // for forward compatibility
 type StreamCameServiceServer interface {
 	Streaming(StreamCameService_StreamingServer) error
 	View(*VeiwReq, StreamCameService_ViewServer) error
+	Move(context.Context, *MoveReq) (*MoveRsp, error)
+	MoveRegister(*MoveRegisterReq, StreamCameService_MoveRegisterServer) error
 	mustEmbedUnimplementedStreamCameServiceServer()
 }
 
@@ -114,6 +159,12 @@ func (UnimplementedStreamCameServiceServer) Streaming(StreamCameService_Streamin
 }
 func (UnimplementedStreamCameServiceServer) View(*VeiwReq, StreamCameService_ViewServer) error {
 	return status.Errorf(codes.Unimplemented, "method View not implemented")
+}
+func (UnimplementedStreamCameServiceServer) Move(context.Context, *MoveReq) (*MoveRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Move not implemented")
+}
+func (UnimplementedStreamCameServiceServer) MoveRegister(*MoveRegisterReq, StreamCameService_MoveRegisterServer) error {
+	return status.Errorf(codes.Unimplemented, "method MoveRegister not implemented")
 }
 func (UnimplementedStreamCameServiceServer) mustEmbedUnimplementedStreamCameServiceServer() {}
 
@@ -175,13 +226,57 @@ func (x *streamCameServiceViewServer) Send(m *VeiwRsp) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _StreamCameService_Move_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MoveReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StreamCameServiceServer).Move(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/StreamCameService/move",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StreamCameServiceServer).Move(ctx, req.(*MoveReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _StreamCameService_MoveRegister_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(MoveRegisterReq)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(StreamCameServiceServer).MoveRegister(m, &streamCameServiceMoveRegisterServer{stream})
+}
+
+type StreamCameService_MoveRegisterServer interface {
+	Send(*MoveRsp) error
+	grpc.ServerStream
+}
+
+type streamCameServiceMoveRegisterServer struct {
+	grpc.ServerStream
+}
+
+func (x *streamCameServiceMoveRegisterServer) Send(m *MoveRsp) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // StreamCameService_ServiceDesc is the grpc.ServiceDesc for StreamCameService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var StreamCameService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "StreamCameService",
 	HandlerType: (*StreamCameServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "move",
+			Handler:    _StreamCameService_Move_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "streaming",
@@ -191,6 +286,11 @@ var StreamCameService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "view",
 			Handler:       _StreamCameService_View_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "moveRegister",
+			Handler:       _StreamCameService_MoveRegister_Handler,
 			ServerStreams: true,
 		},
 	},

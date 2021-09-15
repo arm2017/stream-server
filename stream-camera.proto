@@ -21,7 +21,25 @@ message VeiwRsp{
   int64 timeFrame = 3;
 }
 
+message MoveReq{
+  string hwId = 1;
+  string direction = 2;
+  int64 timeMove = 3;
+}
+
+message MoveRsp{
+  string direction = 1;
+  int64 timeMove = 2;
+}
+
+message MoveRegisterReq{
+  string hwId = 1;
+  int64 regisTime = 2;
+}
+
 service StreamCameService {
   rpc streaming (stream CameReq) returns (CameRsp) {}
   rpc view (VeiwReq) returns (stream VeiwRsp) {}
+  rpc move(MoveReq) returns (MoveRsp){}
+  rpc moveRegister(MoveRegisterReq) returns (stream MoveRsp){}
 }
