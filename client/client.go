@@ -75,7 +75,7 @@ func Run() {
 			A: 1,
 		}, 2)
 
-		jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img)
+		jpg, jpgerr := gocv.IMEncodeWithParams(gocv.JPEGFileExt, img, []int{gocv.IMWriteJpegQuality, 50})
 		if jpgerr != nil {
 			fmt.Println("jpg encode error")
 			continue
