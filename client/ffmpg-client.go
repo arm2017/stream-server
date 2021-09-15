@@ -15,12 +15,14 @@ import (
 func captureImg() {
 	// ffmpeg -f v4l2 -i /dev/video0 -vframes 1 test.jpeg
 	cmd := exec.Command("ffmpeg", "-f", "v4l2", "-i", "/dev/video0", "-vframes", "1", "test.jpeg", "-y")
-	stdout, err := cmd.Output()
+	err := cmd.Wait()
 
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
+
+	stdout, _ := cmd.Output()
 
 	// Print the output
 	fmt.Println(string(stdout))
