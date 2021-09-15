@@ -3,6 +3,8 @@ package client
 import (
 	"context"
 	"fmt"
+	"image"
+	"image/color"
 	"log"
 	api "stream-cam-api/stream-camera/api"
 	"time"
@@ -39,8 +41,6 @@ func Run() {
 	// webcam.Set(gocv.VideoCaptureFrameWidth, 1980)
 	defer webcam.Close()
 	// prepare image matrix
-	img := gocv.NewMat()
-	defer img.Close()
 
 	stream, err := c.Streaming(context.Background(), grpc.UseCompressor(gzip.Name))
 	if err != nil {
@@ -50,6 +50,7 @@ func Run() {
 	loop := 0
 
 	for {
+		img := gocv.NewMat()
 
 		if ok := webcam.Read(&img); !ok {
 			fmt.Printf("cannot read device %v\n", deviceID)
@@ -62,16 +63,16 @@ func Run() {
 
 		timenow := time.Now()
 		timef := timenow.UnixMilli()
-		// timetxt := timenow.Format(time.RFC3339Nano)
-		// gocv.PutText(&img, timetxt, image.Point{
-		// 	X: 10,
-		// 	Y: 50,
-		// }, gocv.FontHersheyComplex, 0.7, color.RGBA{
-		// 	R: 59,
-		// 	G: 57,
-		// 	B: 244,
-		// 	A: 1,
-		// }, 2)
+		timetxt := timenow.Format(time.RFC3339Nano)
+		gocv.PutText(&img, timetxt, image.Point{
+			X: 10,
+			Y: 50,
+		}, gocv.FontHersheyComplex, 0.7, color.RGBA{
+			R: 59,
+			G: 57,
+			B: 244,
+			A: 1,
+		}, 2)
 
 		jpg, jpgerr := gocv.IMEncode(gocv.JPEGFileExt, img)
 		if jpgerr != nil {
@@ -89,5 +90,6 @@ func Run() {
 		loop = loop + 1
 		fmt.Printf("Send... : %v , Loop : %v\n", timef, (loop))
 		time.Sleep(100 * time.Microsecond)
+		img.Close()
 	}
 }
