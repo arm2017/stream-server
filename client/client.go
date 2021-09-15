@@ -16,8 +16,8 @@ import (
 )
 
 const (
-	// address  = "localhost:50051"
-	address  = "0.tcp.ap.ngrok.io:17368"
+	address = "172.20.10.4:50051"
+	// address  = "0.tcp.ap.ngrok.io:17368"
 	deviceID = 0
 )
 
