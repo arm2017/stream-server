@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	moveregister.RunTest()
+	moveregister.Run()
 	fmt.Print("OK.")
 }
