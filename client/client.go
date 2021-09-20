@@ -19,7 +19,7 @@ const (
 	// address = "localhost:50051"
 	address    = "0.tcp.ap.ngrok.io:18664"
 	deviceID   = 0
-	jpgQuality = 50
+	jpgQuality = 40
 )
 
 func streamCameToServer(streamClient *api.StreamCameServiceClient) {
