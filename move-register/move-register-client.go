@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	address = "localhost:50051"
+	// address = "localhost:50051"
+	address = "0.tcp.ap.ngrok.io:18664"
 )
 
 func MoveRegisterToServer(streamClient *api.StreamCameServiceClient) {
