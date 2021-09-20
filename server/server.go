@@ -88,7 +88,14 @@ func (svr *server) View(in *api.VeiwReq, stream api.StreamCameService_ViewServer
 				log.Println(sendErr)
 				return sendErr
 			}
+			fmt.Println("send...")
 			lastTimeFrame = item.TimeFrame
+		}
+
+		cerr := stream.Context().Err()
+		if cerr != nil {
+			log.Println(cerr)
+			return cerr
 		}
 
 		time.Sleep(10 * time.Millisecond)
@@ -98,8 +105,8 @@ func (svr *server) View(in *api.VeiwReq, stream api.StreamCameService_ViewServer
 
 func (svr *server) MoveRegister(in *api.MoveRegisterReq, stream api.StreamCameService_MoveRegisterServer) error {
 
-	if svr.movehw.online {
-		return errors.New("hw is online")
+	if in.HwId == "" {
+		return errors.New("hwid is null")
 	}
 
 	svr.movehw.hwId = in.HwId
@@ -146,8 +153,10 @@ func (svr *server) MoveRegister(in *api.MoveRegisterReq, stream api.StreamCameSe
 
 func (svr *server) Move(ct context.Context, in *api.MoveReq) (*api.MoveRsp, error) {
 
-	if svr.movehw.hwId != in.HwId {
-		return nil, errors.New("id not match")
+	fmt.Printf("IN : %v\n", in.HwId)
+
+	if in.HwId == "" {
+		return nil, errors.New("id not match : " + in.HwId)
 	}
 
 	if !svr.movehw.online {
