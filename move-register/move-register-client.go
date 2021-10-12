@@ -49,6 +49,8 @@ func MoveRegisterToServer(streamClient *api.StreamCameServiceClient) {
 			bord.MoveD()
 		} else if move.Direction == "S" {
 			bord.MoveS()
+		} else if move.Direction == "STOP" {
+			bord.Clear()
 		}
 
 		time.Sleep(10 * time.Microsecond)
