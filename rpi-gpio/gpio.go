@@ -34,5 +34,19 @@ func Setup() *GpioBoard {
 	g.N4 = rpio.Pin(22) //GPIO3
 	g.N4.Output()
 
+	g.Clear()
 	return &g
+}
+
+func (g *GpioBoard) moveW() {
+	g.N1.High()
+	g.N2.Low()
+}
+
+func (g *GpioBoard) Clear() {
+	g.N1.Low()
+	g.N2.Low()
+	g.N3.Low()
+	g.N4.Low()
+	fmt.Print("clear pin to LOW")
 }
