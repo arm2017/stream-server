@@ -6,7 +6,6 @@ import (
 	"image"
 	"image/color"
 	"log"
-	moveregister "stream-cam-api/move-register"
 	api "stream-cam-api/stream-camera/api"
 	"time"
 
@@ -17,7 +16,7 @@ import (
 )
 
 const (
-	address = moveregister.Address
+	address = "172.20.10.14:50051"
 	// address    = "0.tcp.ap.ngrok.io:18664"
 	deviceID   = 0
 	jpgQuality = 40
