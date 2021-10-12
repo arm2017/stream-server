@@ -88,11 +88,12 @@ func streamCameToServer(streamClient *api.StreamCameServiceClient) {
 
 func Run() {
 	// Set up a connection to the server.
+	log.Printf("connect: %v\n", address)
 	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
-	log.Printf("connect: %v\n", address)
+	log.Printf("connect: %v success.\n", address)
 	defer conn.Close()
 	c := api.NewStreamCameServiceClient(conn)
 	//stream to server
