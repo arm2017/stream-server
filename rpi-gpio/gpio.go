@@ -67,7 +67,7 @@ func (g *GpioBoard) MoveA() {
 	fmt.Println("MoveA")
 
 	// g.Clear()
-
+	fmt.Println(&g.N1)
 	g.N1.Toggle()
 	// g.N2.Low()
 
@@ -90,4 +90,5 @@ func (g *GpioBoard) Clear() {
 	g.N4.Low()
 	fmt.Println("clear pin to LOW")
 	time.Sleep(time.Second / 5)
+	fmt.Println(&g.N1)
 }
