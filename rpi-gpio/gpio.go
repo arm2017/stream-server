@@ -21,7 +21,7 @@ func (g GpioBoard) GpioSetup() GpioBoard {
 	}
 	defer rpio.Close()
 
-	fmt.Sprintf("%T", rpio.Pin(4))
+	fmt.Sprintf("===>%T", rpio.Pin(4))
 	g.N1 = rpio.Pin(4) //GPIO7
 	g.N1.Output()
 

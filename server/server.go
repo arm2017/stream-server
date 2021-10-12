@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	port      = "localhost:50051"
+	port      = ":50051"
 	bufferImg = 30
 )
 
