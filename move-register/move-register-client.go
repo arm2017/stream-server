@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	api "stream-cam-api/stream-camera/api"
+	gpioapi "stream-cam-api/stream-camera/rpi-gpio"
 	"time"
 
 	"google.golang.org/grpc/encoding/gzip"
@@ -50,6 +51,11 @@ func Run() {
 	}
 	log.Printf("connect: %v\n", address)
 	defer conn.Close()
+
+	//gpio
+	bord := gpioapi.GpioSetup()
+	fmt.Println(bord)
+
 	c := api.NewStreamCameServiceClient(conn)
 	//stream to server
 	MoveRegisterToServer(&c)
