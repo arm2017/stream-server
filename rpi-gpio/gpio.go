@@ -14,13 +14,13 @@ type GpioBoard struct {
 	N4 rpio.Pin
 }
 
-func (g GpioBoard) GpioSetup() GpioBoard {
+func Setup() *GpioBoard {
 	if err := rpio.Open(); err != nil {
 		fmt.Println(err)
 		panic(err)
 	}
 	defer rpio.Close()
-
+	g := GpioBoard{}
 	fmt.Printf("===>%T\n", rpio.Pin(4))
 	g.N1 = rpio.Pin(4) //GPIO7
 	g.N1.Output()
@@ -34,5 +34,5 @@ func (g GpioBoard) GpioSetup() GpioBoard {
 	g.N4 = rpio.Pin(22) //GPIO3
 	g.N4.Output()
 
-	return g
+	return &g
 }

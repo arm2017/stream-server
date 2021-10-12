@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	gpioapi "stream-cam-api/rpi-gpio"
+	rpigpio "stream-cam-api/rpi-gpio"
 	api "stream-cam-api/stream-camera/api"
 	"time"
 
@@ -18,7 +18,7 @@ const (
 	// address = "0.tcp.ap.ngrok.io:18664"
 )
 
-var bord *gpioapi.GpioBoard
+var bord *rpigpio.GpioBoard
 
 func MoveRegisterToServer(streamClient *api.StreamCameServiceClient) {
 
@@ -55,7 +55,7 @@ func Run() {
 	defer conn.Close()
 
 	//gpio
-	bord = gpioapi.GpioSetup()
+	bord = rpigpio.Setup()
 	fmt.Println(bord)
 
 	c := api.NewStreamCameServiceClient(conn)
