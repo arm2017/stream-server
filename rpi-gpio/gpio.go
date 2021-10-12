@@ -20,7 +20,7 @@ func Setup() *GpioBoard {
 		fmt.Println(err)
 		panic(err)
 	}
-	defer rpio.Close()
+	// defer rpio.Close()
 	g := GpioBoard{}
 	fmt.Printf("===>%T\n", rpio.Pin(4))
 	g.N1 = rpio.Pin(10) //GPIO23
