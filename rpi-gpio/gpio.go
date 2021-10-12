@@ -38,9 +38,48 @@ func Setup() *GpioBoard {
 	return &g
 }
 
-func (g *GpioBoard) moveW() {
+func (g *GpioBoard) MoveW() {
+	fmt.Println("MoveW")
+
+	g.Clear()
+
 	g.N1.High()
 	g.N2.Low()
+
+	g.N3.High()
+	g.N4.Low()
+}
+
+func (g *GpioBoard) MoveS() {
+	fmt.Println("MoveS")
+
+	g.Clear()
+
+	g.N1.Low()
+	g.N2.High()
+
+	g.N3.Low()
+	g.N4.High()
+}
+
+func (g *GpioBoard) MoveA() {
+	fmt.Println("MoveA")
+
+	g.Clear()
+
+	g.N1.High()
+	g.N2.Low()
+
+}
+
+func (g *GpioBoard) MoveD() {
+	fmt.Println("MoveD")
+
+	g.Clear()
+
+	g.N3.High()
+	g.N4.Low()
+
 }
 
 func (g *GpioBoard) Clear() {
@@ -48,5 +87,5 @@ func (g *GpioBoard) Clear() {
 	g.N2.Low()
 	g.N3.Low()
 	g.N4.Low()
-	fmt.Print("clear pin to LOW")
+	fmt.Println("clear pin to LOW")
 }

@@ -41,6 +41,16 @@ func MoveRegisterToServer(streamClient *api.StreamCameServiceClient) {
 
 		fmt.Printf("Move : %v, Time : %v\n", move.Direction, move.TimeMove)
 
+		if move.Direction == "W" {
+			bord.MoveW()
+		} else if move.Direction == "A" {
+			bord.MoveA()
+		} else if move.Direction == "D" {
+			bord.MoveD()
+		} else if move.Direction == "S" {
+			bord.MoveS()
+		}
+
 		time.Sleep(10 * time.Microsecond)
 	}
 }
@@ -56,7 +66,7 @@ func Run() {
 
 	//gpio
 	bord = rpigpio.Setup()
-	fmt.Println(bord)
+	fmt.Println("Gpio is OK.")
 
 	c := api.NewStreamCameServiceClient(conn)
 	//stream to server
