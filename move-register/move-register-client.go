@@ -67,6 +67,7 @@ func Run() {
 	//gpio
 	bord = rpigpio.Setup()
 	fmt.Println("Gpio is OK.")
+	defer bord.Close()
 
 	c := api.NewStreamCameServiceClient(conn)
 	//stream to server

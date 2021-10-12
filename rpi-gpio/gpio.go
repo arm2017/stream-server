@@ -20,10 +20,10 @@ func Setup() *GpioBoard {
 		fmt.Println(err)
 		panic(err)
 	}
-	// defer rpio.Close()
+
 	g := GpioBoard{}
 	fmt.Printf("===>%T\n", rpio.Pin(4))
-	g.N1 = rpio.Pin(10) //GPIO23
+	g.N1 = rpio.Pin(4) //GPIO4
 	g.N1.Output()
 
 	g.N2 = rpio.Pin(17) //GPIO17
@@ -66,10 +66,9 @@ func (g *GpioBoard) MoveS() {
 func (g *GpioBoard) MoveA() {
 	fmt.Println("MoveA")
 
-	// g.Clear()
-	fmt.Println(&g.N1)
-	g.N1.Toggle()
-	// g.N2.Low()
+	g.Clear()
+	g.N1.High()
+	g.N2.Low()
 
 }
 
@@ -91,4 +90,7 @@ func (g *GpioBoard) Clear() {
 	fmt.Println("clear pin to LOW")
 	time.Sleep(time.Second / 5)
 	fmt.Println(&g.N1)
+}
+func (g *GpioBoard) Close() error {
+	return rpio.Close()
 }
