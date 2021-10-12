@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	address = "172.20.10.14:50051"
+	Address = "172.20.10.14:50051"
 	// address = "0.tcp.ap.ngrok.io:18664"
 )
 
@@ -57,11 +57,11 @@ func MoveRegisterToServer(streamClient *api.StreamCameServiceClient) {
 
 func Run() {
 	// Set up a connection to the server.
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(Address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
-	log.Printf("connect: %v\n", address)
+	log.Printf("connect: %v\n", Address)
 	defer conn.Close()
 
 	//gpio
