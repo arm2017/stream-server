@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	gpioapi "stream-cam-api/rpi-gpio"
 	api "stream-cam-api/stream-camera/api"
-	gpioapi "stream-cam-api/stream-camera/rpi-gpio"
 	"time"
 
 	"google.golang.org/grpc/encoding/gzip"
