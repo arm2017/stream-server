@@ -89,8 +89,8 @@ func (g *GpioBoard) Clear() {
 	g.N4.Low()
 	fmt.Println("clear pin to LOW")
 	time.Sleep(time.Second / 5)
-	fmt.Println(&g.N1)
 }
 func (g *GpioBoard) Close() error {
+	g.Clear()
 	return rpio.Close()
 }
