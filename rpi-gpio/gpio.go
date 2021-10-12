@@ -66,10 +66,10 @@ func (g *GpioBoard) MoveS() {
 func (g *GpioBoard) MoveA() {
 	fmt.Println("MoveA")
 
-	g.Clear()
+	// g.Clear()
 
 	g.N1.High()
-	g.N2.Low()
+	// g.N2.Low()
 
 }
 
