@@ -8,10 +8,10 @@ import (
 
 type GpioBoard struct {
 	N1 rpio.Pin
-	N2 *rpio.Pin
+	N2 rpio.Pin
 
-	N3 *rpio.Pin
-	N4 *rpio.Pin
+	N3 rpio.Pin
+	N4 rpio.Pin
 }
 
 func (g GpioBoard) GpioSetup() GpioBoard {
@@ -21,7 +21,7 @@ func (g GpioBoard) GpioSetup() GpioBoard {
 	}
 	defer rpio.Close()
 
-	fmt.Sprintf("===>%T", rpio.Pin(4))
+	fmt.Printf("===>%T\n", rpio.Pin(4))
 	g.N1 = rpio.Pin(4) //GPIO7
 	g.N1.Output()
 
