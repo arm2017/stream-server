@@ -2,6 +2,7 @@ package rpigpio
 
 import (
 	"fmt"
+	"time"
 
 	rpio "github.com/stianeikeland/go-rpio/v4"
 )
@@ -88,4 +89,5 @@ func (g *GpioBoard) Clear() {
 	g.N3.Low()
 	g.N4.Low()
 	fmt.Println("clear pin to LOW")
+	time.Sleep(time.Microsecond * 10)
 }
