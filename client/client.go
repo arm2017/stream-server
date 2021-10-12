@@ -81,7 +81,7 @@ func streamCameToServer(streamClient *api.StreamCameServiceClient) {
 			log.Fatalln(sendErr)
 		}
 		loop = loop + 1
-		fmt.Printf("Send... : %v , Loop : %v\n", timef, (loop))
+		// fmt.Printf("Send... : %v , Loop : %v\n", timef, (loop))
 		time.Sleep(100 * time.Microsecond)
 	}
 }
