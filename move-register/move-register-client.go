@@ -18,6 +18,8 @@ const (
 	// address = "0.tcp.ap.ngrok.io:18664"
 )
 
+var bord *gpioapi.GpioBoard
+
 func MoveRegisterToServer(streamClient *api.StreamCameServiceClient) {
 
 	stream, err := (*streamClient).MoveRegister(context.Background(), &api.MoveRegisterReq{
@@ -53,7 +55,7 @@ func Run() {
 	defer conn.Close()
 
 	//gpio
-	bord := gpioapi.GpioSetup()
+	bord = gpioapi.GpioSetup()
 	fmt.Println(bord)
 
 	c := api.NewStreamCameServiceClient(conn)
