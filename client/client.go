@@ -82,6 +82,7 @@ func streamCameToServer(streamClient *api.StreamCameServiceClient) {
 		}
 		loop = loop + 1
 		// fmt.Printf("Send... : %v , Loop : %v\n", timef, (loop))
+		jpg.Close()
 		time.Sleep(100 * time.Microsecond)
 	}
 }

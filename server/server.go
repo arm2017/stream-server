@@ -88,7 +88,7 @@ func (svr *server) View(in *api.VeiwReq, stream api.StreamCameService_ViewServer
 				log.Println(sendErr)
 				return sendErr
 			}
-			fmt.Println("send...")
+			// fmt.Println("send...")
 			lastTimeFrame = item.TimeFrame
 		}
 
